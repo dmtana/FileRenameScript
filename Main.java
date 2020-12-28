@@ -1,5 +1,12 @@
-import java.nio.file.*;
-import java.io.*;
+package FileRenameScript;
+
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
 
@@ -16,22 +23,13 @@ class MyFileVisitor extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes basicFileAttributes) throws IOException {
         System.out.println(file.getFileName());
-        /**
-         * Rename File Algorithm
+        /*
+         * Rename File
+         * if name contain "IMG_"
+         * delete "IMG_" fromm name of file
          */
         if(file.getFileName().toString().contains("IMG_")){
-
-            String fileName = file.getFileName().toString();
-            String newFileName = fileName.substring(4, fileName.length());
-            String filePath = file.toAbsolutePath().toString();
-
-            StringBuilder SBfilePath = new StringBuilder(filePath);
-            SBfilePath.delete(filePath.length()-fileName.length(), filePath.length());
-            SBfilePath.append(newFileName);
-
-            String newFilePath = SBfilePath.toString();
-
-            Files.move(file, Paths.get(newFilePath));
+            Files.move(file, Paths.get(file.toAbsolutePath().toString().replace("IMG_","")));
         }
         return FileVisitResult.CONTINUE;
     }
